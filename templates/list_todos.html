@@ -1,0 +1,22 @@
+{% extends "layout.html" %}
+{% block body %}
+{% if session.logged_in %}
+<form action="{{ url_for('add_todo') }}" method=post class=add-todo>
+  <dl>
+    <dt>Title:
+    <dd><input type=text size=30 name=title>
+    <dt>Text:
+    <dd><textarea name=text rows=5 cols=40></textarea>
+    <dd><input type=submit value=Share>
+  </dl>
+</form>
+{% endif %}
+<ul
+  class=entries>
+  {% for todo in todos %}
+  <li><h2>{{ todo.title }}</h2>{{ todo.title|safe }}
+  {% else %}
+  <li><em>Unbelievable.  No entries here so far</em>
+  {% endfor %}
+</ul>
+{% endblock %}
