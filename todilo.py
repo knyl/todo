@@ -18,24 +18,23 @@ app.config.update(dict(
 app.config.from_envvar('TODILO_SETTINGS', silent=True)
 
 @app.route('/')
-def list_todos():
-    #username = request.args.get('UserName')
-    #password = request.args.get('Password')
-    todos = db.get_list()
-    return render_template('list_todos.html', todos=todos)
+def hello():
+    #todos = db.get_list()
+    return 'Hello world!'
 
-@app.route('/add', methods=['POST'])
+@app.route('/todo', methods=['POST'])
 def add_todo():
-    if not session.get('logged_in'):
-        abort(401)
-    #db = get_db()
-    #db.execute('insert into entries (title, text) values (?, ?)',
-    #           [request.form['title'], request.form['text']])
-    #db.commit()
     title = request.form['title']
     db.add_todo(title)
     flash('New todo was successfully added')
     return redirect(url_for('list_todos'))
+
+@app.route('/todo/<int:todo_id>', methods=['GET'])
+def get_todo(todo_id):
+    todo = db.get_todo(todo_id)
+    if todo == None:
+        abort(404)
+    return todo['title']
 
 
 @app.route('/login', methods=['GET', 'POST'])
