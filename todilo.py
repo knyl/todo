@@ -23,7 +23,7 @@ def hello():
 
 @app.route('/todos', methods=['GET'])
 def list_todos():
-    todos = db.get_list()
+    todos = db.get_list_with_order()
     return json.dumps(todos)
 
 @app.route('/todos', methods=['POST'])

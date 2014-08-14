@@ -8,6 +8,7 @@ class TodosEmptyResource(unittest.TestCase):
         self.app = todilo.app.test_client()
 
     def tearDown(self):
+        # TODO: Clear database after tests
         pass
 
     def test_empty_db(self):
@@ -19,12 +20,14 @@ class TodosEmptyResource(unittest.TestCase):
         title = 'todo item 1'
         rv1 = self.app.post('/todos', data = {'title':title})
         assert '201 CREATED' in rv1.status
-        rv = self.app.get('/todos')
+        rv = self.app.get('/todos/1')
         assert title in rv.data
 
     def test_get_todo_not_found(self):
         rv = self.app.get('/todos/4')
         assert '404 NOT FOUND' in rv.status
+
+    # TODO: Add test for get_list_with_order
 
 if __name__ == '__main__':
     unittest.main()
