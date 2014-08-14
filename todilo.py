@@ -1,6 +1,6 @@
 import os
-from flask import Flask, request, session, g, redirect, url_for, abort, \
-                  render_template, flash
+from flask import Flask, request, abort, json,\
+                  render_template, make_response
 import simple_db
 
 app = Flask(__name__)
@@ -19,43 +19,25 @@ app.config.from_envvar('TODILO_SETTINGS', silent=True)
 
 @app.route('/')
 def hello():
-    #todos = db.get_list()
     return 'Hello world!'
 
-@app.route('/todo', methods=['POST'])
+@app.route('/todos', methods=['GET'])
+def list_todos():
+    todos = db.get_list()
+    return json.dumps(todos)
+
+@app.route('/todos', methods=['POST'])
 def add_todo():
     title = request.form['title']
     db.add_todo(title)
-    flash('New todo was successfully added')
-    return redirect(url_for('list_todos'))
+    return ('', 201, [])
 
-@app.route('/todo/<int:todo_id>', methods=['GET'])
+@app.route('/todos/<int:todo_id>', methods=['GET'])
 def get_todo(todo_id):
     todo = db.get_todo(todo_id)
     if todo == None:
         abort(404)
-    return todo['title']
-
-
-@app.route('/login', methods=['GET', 'POST'])
-def login():
-    error = None
-    if request.method == 'POST':
-        if request.form['username'] != app.config['USERNAME']:
-              error = 'Invalid username'
-        elif request.form['password'] != app.config['PASSWORD']:
-            error = 'Invalid password'
-        else:
-            session['logged_in'] = True
-            flash('You were logged in')
-            return redirect(url_for('list_todos'))
-    return render_template('login.html', error=error)
-
-@app.route('/logout')
-def logout():
-    session.pop('logged_in', None)
-    flash('You were logged out')
-    return redirect(url_for('list_todos'))
+    return json.dumps(todo)
 
 if __name__ == '__main__':
     app.run()

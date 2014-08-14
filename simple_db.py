@@ -1,9 +1,7 @@
 class SimpleDb:
 
     def __init__(self):
-        self.todo_list = [{'id':1, 'title':'todo item 1'},
-                          {'id':2, 'title':'todo item 2'}
-                         ]
+        self.todo_list = []
 
     def get_list(self):
         return self.todo_list
@@ -15,4 +13,12 @@ class SimpleDb:
         return None
 
     def add_todo(self, title):
-        self.todo_list.append({'title':title})
+        next_id = get_next_id(self.todo_list)
+        self.todo_list.append({'id':next_id, 'title':title, 'done':False})
+
+def get_next_id(todos):
+  ids = [todo['id'] for todo in todos]
+  if ids == []:
+    return 1
+  else:
+    return max(ids)+1
