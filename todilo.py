@@ -1,5 +1,5 @@
 import os
-from flask import Flask, request, abort, json,\
+from flask import Flask, request, abort, json, render_template,\
                   render_template, make_response
 import simple_db
 
@@ -19,7 +19,7 @@ app.config.from_envvar('TODILO_SETTINGS', silent=True)
 
 @app.route('/')
 def hello():
-    return 'Hello world!'
+    return render_template("list_todos.html")
 
 @app.route('/todos', methods=['GET'])
 def list_todos():
