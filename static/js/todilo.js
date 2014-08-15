@@ -114,6 +114,7 @@ $(function(){
 
         events: {
             "keypress #new-todo": "createOnEnter",
+            "keypress #new-todo-button": "create",
             "click #clear-all": "clearAll",
             "click #toggle-all": "toggleAllComplete"
         },
@@ -159,7 +160,15 @@ $(function(){
             if (e.keyCode != 13) return;
             if (!this.input.val()) return;
 
+            this.create(e)
+            //Todos.create({title: this.input.val()});
+            //this.input.val('');
+        },
+
+        create: function(e) {
+            if (!this.input.val()) return;
             Todos.create({title: this.input.val()});
+
             this.input.val('');
         },
 
