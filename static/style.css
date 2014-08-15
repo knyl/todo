@@ -5,7 +5,7 @@ body {
 }
 
 body {
-    font: 14px "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font: 12px Helvetica, Arial, sans-serif;
     line-height: 1.4em;
     background: #eeeeee;
     color: #333333;
@@ -68,10 +68,9 @@ body {
 }
 
 #todo-list li {
-    padding: 18px 20px 18px 0;
+    padding: 16px 18px 16px 0;
     position: relative;
-    font-size: 24px;
-    border-bottom: 1px solid #cccccc;
+    font-size: 14px;
 }
 
 #todo-list li:last-child {
@@ -91,7 +90,6 @@ body {
     cursor: pointer;
     width: 20px;
     height: 20px;
-    background: url(destroy.png) no-repeat;
 }
 
 #todo-list li:hover .destroy {
@@ -136,9 +134,8 @@ body {
     margin: 0 -20px -20px -20px;
     overflow: hidden;
     color: #555555;
-    background: #f4fce8;
-    border-top: 1px solid #ededed;
-    padding: 0 20px;
+    border-top: 1px dashed #aaaaaa;
+    padding: 18px 18px;
     line-height: 37px;
     -webkit-border-radius: 0 0 5px 5px;
     -moz-border-radius: 0 0 5px 5px;
@@ -156,27 +153,12 @@ body {
     font-size: 11px;
     margin-top: 8px;
     margin-bottom: 8px;
-    padding: 0 10px 1px;
-    cursor: pointer;
-    -webkit-border-radius: 12px;
-    -moz-border-radius: 12px;
-    -ms-border-radius: 12px;
-    -o-border-radius: 12px;
+    padding: 0 10px 0;
     border-radius: 12px;
-    -webkit-box-shadow: rgba(0, 0, 0, 0.2) 0 -1px 0 0;
-    -moz-box-shadow: rgba(0, 0, 0, 0.2) 0 -1px 0 0;
-    -ms-box-shadow: rgba(0, 0, 0, 0.2) 0 -1px 0 0;
-    -o-box-shadow: rgba(0, 0, 0, 0.2) 0 -1px 0 0;
-    box-shadow: rgba(0, 0, 0, 0.2) 0 -1px 0 0;
 }
 
 #clear-all:hover {
     background: rgba(0, 0, 0, 0.15);
-    -webkit-box-shadow: rgba(0, 0, 0, 0.3) 0 -1px 0 0;
-    -moz-box-shadow: rgba(0, 0, 0, 0.3) 0 -1px 0 0;
-    -ms-box-shadow: rgba(0, 0, 0, 0.3) 0 -1px 0 0;
-    -o-box-shadow: rgba(0, 0, 0, 0.3) 0 -1px 0 0;
-    box-shadow: rgba(0, 0, 0, 0.3) 0 -1px 0 0;
 }
 
 #clear-all:active {
@@ -186,26 +168,4 @@ body {
 
 #todo-count span {
     font-weight: bold;
-}
-
-#instructions {
-    margin: 10px auto;
-    color: #777777;
-    text-shadow: rgba(255, 255, 255, 0.8) 0 1px 0;
-    text-align: center;
-}
-
-#instructions a {
-    color: #336699;
-}
-
-#credits {
-    margin: 30px auto;
-    color: #999;
-    text-shadow: rgba(255, 255, 255, 0.8) 0 1px 0;
-    text-align: center;
-}
-
-#credits a {
-    color: #888;
 }
