@@ -114,7 +114,7 @@ $(function(){
 
         events: {
             "keypress #new-todo": "createOnEnter",
-            "click #clear-completed": "clearCompleted",
+            "click #clear-all": "clearAll",
             "click #toggle-all": "toggleAllComplete"
         },
 
@@ -144,8 +144,6 @@ $(function(){
                 this.main.hide();
                 this.footer.hide();
             }
-
-            this.allCheckbox.checked = !remaining;
         },
 
         addOne: function(todo) {
@@ -165,8 +163,10 @@ $(function(){
             this.input.val('');
         },
 
-        clearCompleted: function() {
-            _.invoke(Todos.done(), 'destroy');
+        clearAll: function() {
+            //var done = this.allCheckbox.checked;
+            Todos.each(function (todo) {todo.save({'done': true}); });
+            //_.invoke(Todos.done(), 'destroy');
             return false;
         },
 
