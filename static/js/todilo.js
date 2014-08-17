@@ -27,9 +27,6 @@ $(function(){
 
         model: Todo,
 
-        // TODO: change this to REST calls
-        localStorage: new Backbone.LocalStorage("todos-backbone"),
-
         done: function() {
             return this.filter(function(todo){return todo.get('done'); });
         },
@@ -45,7 +42,9 @@ $(function(){
 
         comparator: function(todo) {
             return todo.get('order');
-        }
+        },
+
+        url: '/todos'
 
     });
 

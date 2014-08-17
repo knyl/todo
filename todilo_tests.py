@@ -1,5 +1,7 @@
 import todilo
 import unittest
+from flask import json
+import httplib
 
 class TodosEmptyResource(unittest.TestCase):
 
@@ -18,7 +20,9 @@ class TodosEmptyResource(unittest.TestCase):
 
     def test_add_and_get_todo(self):
         title = 'todo item 1'
-        rv1 = self.app.post('/todos', data = {'title':title})
+        data = json.dumps({'title':title})
+        rv1 = self.app.post('/todos', data = data,
+                            content_type='application/json')
         assert '201 CREATED' in rv1.status
         rv = self.app.get('/todos/1')
         assert title in rv.data

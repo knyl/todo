@@ -2,8 +2,8 @@
 
 
 ## TODO
-* Make button submit the todo
 * Change backbone.localStorage to instead use the actual backend
+* Make button submit the todo
 * PUT /todos/<id> to update the order of items, the title or toggle done
 * POST /todos to create a new todo, returns the id
 * Put in a real database
