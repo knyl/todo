@@ -1,5 +1,5 @@
 import os
-from flask import Flask, jsonify, abort, request, render_template
+from flask import Flask, jsonify, abort, request, render_template, make_response
 import simple_db
 import logging
 
@@ -43,6 +43,10 @@ def get_todo(todo_id):
     if todo == None:
         abort(404)
     return jsonify(todo)
+
+@app.errorhandler(404)
+def not_found(error):
+    return make_response(jsonify( { 'error': 'Not found' } ), 404)
 
 if __name__ == '__main__':
     app.run()
