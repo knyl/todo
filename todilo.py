@@ -1,5 +1,5 @@
 import os
-from flask import Flask, jsonify, abort, request, render_template, make_response
+from flask import Flask, json, abort, request, render_template, make_response
 import simple_db
 import logging
 
@@ -26,7 +26,7 @@ def hello():
 def list_todos():
     logging.info("Listing todos")
     todos = db.get_list()
-    return jsonify(todos)
+    return json.dumps(todos)
 
 @app.route('/todos', methods=['POST'])
 def add_todo():
@@ -34,7 +34,7 @@ def add_todo():
     todo = request.get_json()
     logging.info('Adding todo with title: %s', todo[u'title'])
     todo_id = db.add_todo(todo)
-    return jsonify({u'id':todo_id}), 201
+    return json.dumps({u'id':todo_id}), 201
 
 @app.route('/todos/<int:todo_id>', methods=['GET'])
 def get_todo(todo_id):
@@ -42,11 +42,11 @@ def get_todo(todo_id):
     todo = db.get_todo(todo_id)
     if todo == None:
         abort(404)
-    return jsonify(todo)
+    return json.dumps(todo)
 
 @app.errorhandler(404)
 def not_found(error):
-    return make_response(jsonify( { 'error': 'Not found' } ), 404)
+    return make_response(json.dumps( { 'error': 'Not found' } ), 404)
 
 if __name__ == '__main__':
     app.run()
