@@ -2,6 +2,8 @@
 <title>Todilo</title>
 <link rel=stylesheet type=text/css
       href="{{ url_for('static', filename='style.css') }}">
+<link rel=stylesheet type=text/css
+      href="{{ url_for('static', filename='jquery-ui.css') }}">
 {% block body %}
 
 <div id="todoapp">
@@ -45,6 +47,7 @@
 </script>
 
 <script src="static/js/jquery-1.11.1.js"></script>
+<script src="static/js/jquery-ui.js"></script>
 <script src="static/js/underscore.js"></script>
 <script src="static/js/backbone.js"></script>
 <script src="static/js/backbone.localStorage.js"></script>

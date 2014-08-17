@@ -37,11 +37,11 @@ $(function(){
 
         nextPrio: function() {
             if (!this.length) return 1;
-            return this.last().get('order') + 1;
+            return this.last().get('prio') + 1;
         },
 
         comparator: function(todo) {
-            return todo.get('order');
+            return todo.get('prio');
         },
 
         url: '/todos'
@@ -54,6 +54,8 @@ $(function(){
 
         tagName: "li",
 
+        className: "draggable",
+
         template: _.template($('#item-template').html()),
 
         events: {
@@ -61,12 +63,17 @@ $(function(){
             "dblclick .view"  : "edit",
             "click a.destroy" : "clear",
             "keypress .edit"  : "updateOnEnter",
-            "blur .edit"      : "close"
+            "blur .edit"      : "close",
+            "drop"            : "drop"
         },
 
         initialize: function() {
             this.listenTo(this.model, 'change', this.render);
             this.listenTo(this.model, 'destroy', this.remove);
+        },
+
+        drop: function(event, index) {
+            this.$el.trigger('update-sort', [this.model, index]);
         },
 
         render: function() {
@@ -112,10 +119,11 @@ $(function(){
         statsTemplate: _.template($('#stats-template').html()),
 
         events: {
-            "keypress #new-todo": "createOnEnter",
+            "keypress #new-todo"       : "createOnEnter",
             "keypress #new-todo-button": "create",
-            "click #clear-all": "clearAll",
-            "click #toggle-all": "toggleAllComplete"
+            "click #clear-all"         : "clearAll",
+            "click #toggle-all"        : "toggleAllComplete",
+            "update-sort"              : "updateSort"
         },
 
         initialize: function() {
@@ -140,10 +148,19 @@ $(function(){
                 this.main.show();
                 this.footer.show();
                 this.footer.html(this.statsTemplate({done: done, remaining: remaining}));
+
+//                this.$el.children().remove();
+//                this.collection.each(this.appendModelView, this);
             } else {
                 this.main.hide();
                 this.footer.hide();
             }
+            return this;
+        },
+
+        appendModelView: function(model) {
+            var el = new Application.View.Item({model: model}).render().el;
+            this.$el.append(el);
         },
 
         addOne: function(todo) {
@@ -160,8 +177,6 @@ $(function(){
             if (!this.input.val()) return;
 
             this.create(e)
-            //Todos.create({title: this.input.val()});
-            //this.input.val('');
         },
 
         create: function(e) {
@@ -181,10 +196,33 @@ $(function(){
         toggleAllComplete: function() {
             var done = this.allCheckbox.checked;
             Todos.each(function (todo) {todo.save({'done': done}); });
-        }
+        },
 
+        updateSort: function(event, model, position) {
+            this.collection.remove(model);
+
+            this.collection.each(function (model, index) {
+                var ordinal = index;
+                if (index >= position)
+                    ordinal += 1;
+                model.set('ordinal', ordinal);
+            });
+            model.set('ordinal', position);
+            this.collection.add(model, {at: position});
+
+            // to update ordinals on server:
+            var ids = this.collection.pluck('id');
+            $('#post-data').html('post ids to server: ' + ids.join(', '));
+            this.render();
+        }
     });
 
     var App = new AppView;
+
+    $('#todo-list').sortable({
+        stop: function(event, ui) {
+            ui.item.trigger('drop', ui.item.index());
+        }
+    });
 
 });
