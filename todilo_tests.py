@@ -13,12 +13,12 @@ class TodosEmptyResource(unittest.TestCase):
         # TODO: Clear database after tests
         pass
 
-    def xtest_empty_db(self):
+    def test_empty_db(self):
         rv = self.app.get('/todos')
         assert '200 OK' in rv.status
         assert '' in rv.data
 
-    def xtest_add_and_get_todo(self):
+    def test_add_and_get_todo(self):
         title = 'todo item 1'
         data = json.dumps({'title':title})
         rv1 = self.app.post('/todos', data = data,
@@ -28,7 +28,7 @@ class TodosEmptyResource(unittest.TestCase):
         rv = self.app.get('/todos/1')
         assert title in rv.data
 
-    def xtest_get_todo_not_found(self):
+    def test_get_todo_not_found(self):
         rv = self.app.get('/todos/4')
         assert '404 NOT FOUND' in rv.status
 
@@ -57,14 +57,32 @@ class TodosEmptyResource(unittest.TestCase):
         assert True == updated_data[u'done']
 
     def test_update_order(self):
-        todo1 = {'title':'todo1', 'prio': 1, 'done':False}
+        todo1 = {'title':'todo1', 'prio': 0, 'done':False}
         data1 = json.dumps(todo1)
         rv1 = self.app.post('/todos', data = data1,
                             content_type='application/json')
-        todo2 = {'title':'todo2', 'prio': 2, 'done':False}
+        todo1_data = json.loads(rv1.data)
+        id1 = todo1_data[u'id']
+
+        todo2 = {'title':'todo2', 'prio': 1, 'done':False}
         data2 = json.dumps(todo2)
         rv2 = self.app.post('/todos', data = data2,
                             content_type='application/json')
+        todo2_data = json.loads(rv2.data)
+        id2 = todo2_data[u'id']
+
+        ordering_data = json.dumps({'ids':[id2, id1]})
+        rv_ordering = self.app.put('/todos/order', data = ordering_data,
+                                   content_type='application/json')
+        assert '200 OK' in rv_ordering.status
+
+        updated_todo1_res = self.app.get('/todos/' + str(id1))
+        updated_todo1 = json.loads(updated_todo1_res.data)
+        assert 1 == updated_todo1[u'prio']
+
+        updated_todo2_res = self.app.get('/todos/' + str(id2))
+        updated_todo2 = json.loads(updated_todo2_res.data)
+        assert 0 == updated_todo2[u'prio']
 
 
 if __name__ == '__main__':

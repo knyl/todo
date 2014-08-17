@@ -56,6 +56,7 @@ def update_todo(todo_id):
 def update_order():
     ids = request.get_json()
     app.logger.info('Updating ordering to: %s', ids)
+    db.update_order(ids[u'ids'])
     return ''
 
 @app.errorhandler(404)

@@ -2,9 +2,9 @@
 
 
 ## TODO
-* Drag todos to change the order
-* DELETE /todos/<id> to clear a todo
-* Make button submit the todo
+* Clean up tests and code
 * Put in a real database
 * Error handling
+* Make button submit the todo
+* DELETE /todos/<id> to clear a todo
 * XSS/SQL injections/bad stuff - clean/escape the todo text?

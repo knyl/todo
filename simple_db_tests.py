@@ -28,6 +28,17 @@ class SimpleDbTests(unittest.TestCase):
         self.db.update_todo(todo)
         assert todo == self.db.get_todo(todo_id)
 
+    def test_update_order(self):
+        todo1 = {u'title':'todo1', u'prio':0}
+        todo2 = {u'title':'todo2', u'prio':1}
+        id1 = self.db.add_todo(todo1)
+        id2 = self.db.add_todo(todo2)
+        self.db.update_order([id2, id1])
+        todo1 = self.db.get_todo(id1)
+        assert 1 == todo1[u'prio']
+        todo2 = self.db.get_todo(id2)
+        assert 0 == todo2[u'prio']
+
 
 if __name__ == '__main__':
     unittest.main()
