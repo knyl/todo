@@ -18,6 +18,13 @@ class SimpleDb:
         self.todos.append(todo)
         return next_id
 
+    def update_todo(self, updated_todo):
+        todo_id = updated_todo[u'id']
+        todo = self.get_todo(todo_id)
+        self.todos.remove(todo)
+        self.todos.append(updated_todo)
+        return updated_todo
+
 def get_next_id(todos):
   ids = [todo[u'id'] for todo in todos]
   if ids == []:

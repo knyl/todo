@@ -44,6 +44,16 @@ def get_todo(todo_id):
         abort(404)
     return json.dumps(todo)
 
+@app.route('/todos/<int:todo_id>', methods=['PUT'])
+def update_todo(todo_id):
+    logging.info('Updating todo with id: %s', todo_id)
+    todo = db.get_todo(todo_id)
+    logging.info('Tried to fetch todo: %s', todo)
+    if todo == None:
+        abort(404)
+    updated_todo = db.update_todo(request.get_json())
+    return json.dumps(updated_todo)
+
 @app.errorhandler(404)
 def not_found(error):
     return make_response(json.dumps( { 'error': 'Not found' } ), 404)

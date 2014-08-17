@@ -7,27 +7,26 @@ class SimpleDbTests(unittest.TestCase):
         self.db = simple_db.SimpleDb()
 
     def tearDown(self):
+        self.db.todos = []
         pass
 
     def test_empty_db(self):
-        assert [] == self.db.get_list_with_order()
+        assert [] == self.db.get_list()
 
     def test_add_and_get_one_todo(self):
         title = 'todo item 1'
-        self.db.add_todo(title)
+        self.db.add_todo({u'title':title, u'done':False})
         todo = self.db.get_todo(1)
         assert {'title':title, 'done':False, 'id':1} == todo
 
-    def test_list_with_order(self):
-        self.db.todos = []
-        title1 = 'todo item 1'
-        title2 = 'todo item 2'
-        self.db.add_todo(title1)
-        self.db.add_todo(title2)
-        todos = self.db.get_list_with_order()
-        [todo1, todo2] = todos
-        assert todo1['id'] == 2 and todo1['priority'] == 1
-        assert todo2['id'] == 1 and todo2['priority'] == 2
+    def test_update_todo(self):
+        todo = {'title':'todo1', 'done':False}
+        todo_id = self.db.add_todo(todo)
+        todo[u'id'] = todo_id
+        assert todo == self.db.get_todo(todo_id)
+        todo[u'done'] = True
+        self.db.update_todo(todo)
+        assert todo == self.db.get_todo(todo_id)
 
 
 if __name__ == '__main__':
