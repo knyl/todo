@@ -1,12 +1,10 @@
 import os
 from flask import Flask, json, abort, request, render_template, make_response
 import simple_db
-import logging
 
 app = Flask(__name__)
 app.config.from_object(__name__)
 db = simple_db.SimpleDb()
-logging.basicConfig(filename='todilo.log',level=logging.DEBUG)
 
 # TODO: Put all these in a config file
 app.config.update(dict(
@@ -24,21 +22,21 @@ def hello():
 
 @app.route('/todos', methods=['GET'])
 def list_todos():
-    logging.info("Listing todos")
+    app.logger.info("Listing todos")
     todos = db.get_list()
     return json.dumps(todos)
 
 @app.route('/todos', methods=['POST'])
 def add_todo():
-    logging.info('Getting POST request with data: %s', request.data)
+    app.logger.info('Getting POST request with data: %s', request.data)
     todo = request.get_json()
-    logging.info('Adding todo with title: %s', todo[u'title'])
+    app.logger.info('Adding todo with title: %s', todo[u'title'])
     todo_id = db.add_todo(todo)
     return json.dumps({u'id':todo_id}), 201
 
 @app.route('/todos/<int:todo_id>', methods=['GET'])
 def get_todo(todo_id):
-    logging.info('Fetching todo with id: %s', todo_id)
+    app.logger.info('Fetching todo with id: %s', todo_id)
     todo = db.get_todo(todo_id)
     if todo == None:
         abort(404)
@@ -46,9 +44,9 @@ def get_todo(todo_id):
 
 @app.route('/todos/<int:todo_id>', methods=['PUT'])
 def update_todo(todo_id):
-    logging.info('Updating todo with id: %s', todo_id)
+    app.logger.info('Updating todo with id: %s', todo_id)
     todo = db.get_todo(todo_id)
-    logging.info('Tried to fetch todo: %s', todo)
+    app.logger.info('Tried to fetch todo: %s', todo)
     if todo == None:
         abort(404)
     updated_todo = db.update_todo(request.get_json())
