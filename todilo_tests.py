@@ -24,14 +24,13 @@ class TodosEmptyResource(unittest.TestCase):
         rv1 = self.app.post('/todos', data = data,
                             content_type='application/json')
         assert '201 CREATED' in rv1.status
+        assert 'id' in rv1.data
         rv = self.app.get('/todos/1')
         assert title in rv.data
 
     def test_get_todo_not_found(self):
         rv = self.app.get('/todos/4')
         assert '404 NOT FOUND' in rv.status
-
-    # TODO: Add test for get_list_with_order
 
 if __name__ == '__main__':
     unittest.main()

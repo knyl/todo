@@ -2,10 +2,9 @@
 
 
 ## TODO
-* Change backbone.localStorage to instead use the actual backend
-* Make button submit the todo
 * PUT /todos/<id> to update the order of items, the title or toggle done
-* POST /todos to create a new todo, returns the id
+* Make button submit the todo
 * Put in a real database
+* Error handling
 * XSS/SQL injections/bad stuff - clean/escape the todo text?
 * Drag todos to change the order
