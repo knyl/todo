@@ -52,6 +52,12 @@ def update_todo(todo_id):
     updated_todo = db.update_todo(request.get_json())
     return json.dumps(updated_todo)
 
+@app.route('/todos/order', methods=['PUT'])
+def update_order():
+    ids = request.get_json()
+    app.logger.info('Updating ordering to: %s', ids)
+    return ''
+
 @app.errorhandler(404)
 def not_found(error):
     return make_response(json.dumps( { 'error': 'Not found' } ), 404)

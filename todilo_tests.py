@@ -56,5 +56,16 @@ class TodosEmptyResource(unittest.TestCase):
         assert title == updated_data[u'title']
         assert True == updated_data[u'done']
 
+    def test_update_order(self):
+        todo1 = {'title':'todo1', 'prio': 1, 'done':False}
+        data1 = json.dumps(todo1)
+        rv1 = self.app.post('/todos', data = data1,
+                            content_type='application/json')
+        todo2 = {'title':'todo2', 'prio': 2, 'done':False}
+        data2 = json.dumps(todo2)
+        rv2 = self.app.post('/todos', data = data2,
+                            content_type='application/json')
+
+
 if __name__ == '__main__':
     unittest.main()

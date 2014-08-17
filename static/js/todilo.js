@@ -145,22 +145,17 @@ $(function(){
             var remaining = Todos.remaining().length;
 
             if (Todos.length) {
-                this.main.show();
                 this.footer.show();
                 this.footer.html(this.statsTemplate({done: done, remaining: remaining}));
 
-//                this.$el.children().remove();
-//                this.collection.each(this.appendModelView, this);
+                this.$("#todo-list").children().remove();
+                Todos.each(this.addOne, this);
+                this.main.show();
             } else {
                 this.main.hide();
                 this.footer.hide();
             }
             return this;
-        },
-
-        appendModelView: function(model) {
-            var el = new Application.View.Item({model: model}).render().el;
-            this.$el.append(el);
         },
 
         addOne: function(todo) {
@@ -199,20 +194,26 @@ $(function(){
         },
 
         updateSort: function(event, model, position) {
-            this.collection.remove(model);
+            Todos.remove(model);
 
-            this.collection.each(function (model, index) {
+            Todos.each(function (model, index) {
                 var ordinal = index;
                 if (index >= position)
                     ordinal += 1;
-                model.set('ordinal', ordinal);
+                model.set('prio', ordinal);
             });
-            model.set('ordinal', position);
-            this.collection.add(model, {at: position});
+            model.set('prio', position);
+            Todos.add(model, {at: position});
 
             // to update ordinals on server:
-            var ids = this.collection.pluck('id');
-            $('#post-data').html('post ids to server: ' + ids.join(', '));
+            var ids = Todos.pluck('id');
+            var json_data = JSON.stringify({'ids':ids});
+            $.ajax({
+                type: 'PUT',
+                url: '/todos/order',
+                contentType: 'application/json',
+                data: json_data,
+            });
             this.render();
         }
     });
