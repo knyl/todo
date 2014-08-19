@@ -1,17 +1,20 @@
 import todilo
 import unittest
 from flask import json
-import httplib
+import tempfile
+import os
 
 class TodosEmptyResource(unittest.TestCase):
 
     def setUp(self):
+        self.db_fd, todilo.app.config['DATABASE'] = tempfile.mkstemp()
         todilo.app.config['TESTING'] = True
         self.app = todilo.app.test_client()
+        todilo.init_db()
 
     def tearDown(self):
-        # TODO: Clear database after tests
-        pass
+        os.close(self.db_fd)
+        os.unlink(todilo.app.config['DATABASE'])
 
     def test_empty_db(self):
         rv = self.app.get('/todos')
@@ -20,7 +23,7 @@ class TodosEmptyResource(unittest.TestCase):
 
     def test_add_and_get_todo(self):
         title = 'todo item 1'
-        rv1 = self.post_todo({'title':title})
+        rv1 = self.post_todo({'title':title, 'prio':1, 'done':False})
         assert '201 CREATED' in rv1.status
         assert 'id' in rv1.data
         rv = self.app.get('/todos/1')
@@ -49,10 +52,11 @@ class TodosEmptyResource(unittest.TestCase):
         todo['id'] = todo_id
         todo['done'] = True
         data2 = json.dumps(todo)
-        rv2 = self.app.put('/todos/' + str(todo_id), data = data2,
+        rv3 = self.app.put('/todos/' + str(todo_id), data = data2,
                            content_type = 'application/json')
-        updated_data = json.loads(rv2.data)
-        assert '200 OK' in rv2.status
+        assert '200 OK' in rv3.status
+        rv4 = self.app.get('/todos/' + str(todo_id))
+        updated_data = json.loads(rv4.data)
         assert title == updated_data[u'title']
         assert True == updated_data[u'done']
 

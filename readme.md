@@ -4,6 +4,17 @@ A small todo-application written in Python/Flask and Javascript/Backbone.js
 
 Lets you add todos, edit them and reorder them.
 
+### Setup
+
+To create the database, run:
+```
+> sqlite3 todilo.db < schema.sql
+```
+Then, start the application with:
+```
+python todilo.py
+```
+
 ### Backend API
 All data posted to, or retrieved from the API must be valid JSON.
 
@@ -39,8 +50,8 @@ Update the order of the todos.
 
 ### TODO
 * Clean up tests and code
-* Put in a real database
+* Disentangle database from todilo.py
 * Error handling
 * Make button submit the todo
 * DELETE /todos/<id> to clear a todo
-* XSS/SQL injections/bad stuff - clean/escape the todo text?
+* XSS/bad stuff - clean/escape the todo text?
