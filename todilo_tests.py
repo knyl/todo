@@ -20,9 +20,7 @@ class TodosEmptyResource(unittest.TestCase):
 
     def test_add_and_get_todo(self):
         title = 'todo item 1'
-        data = json.dumps({'title':title})
-        rv1 = self.app.post('/todos', data = data,
-                            content_type='application/json')
+        rv1 = self.post_todo({'title':title})
         assert '201 CREATED' in rv1.status
         assert 'id' in rv1.data
         rv = self.app.get('/todos/1')
@@ -33,12 +31,14 @@ class TodosEmptyResource(unittest.TestCase):
         assert '404 NOT FOUND' in rv.status
 
     def test_update_todo(self):
+        """ Create a todo, then update the done status, and verify that the
+            done status is updated.
+        """
         title = 'todo item 1'
         todo = {'title':title, 'prio': 1, 'done':False}
-        data = json.dumps(todo)
-        rv1 = self.app.post('/todos', data = data,
-                            content_type='application/json')
+        rv1 = self.post_todo(todo)
         assert '201 CREATED' in rv1.status
+
         data = json.loads(rv1.data)
         todo_id = data[u'id']
         rv2 = self.app.get('/todos/' + str(todo_id))
@@ -57,17 +57,16 @@ class TodosEmptyResource(unittest.TestCase):
         assert True == updated_data[u'done']
 
     def test_update_order(self):
+        """ Create two todos, update the order of them, and verify that the
+            new order is correct.
+        """
         todo1 = {'title':'todo1', 'prio': 0, 'done':False}
-        data1 = json.dumps(todo1)
-        rv1 = self.app.post('/todos', data = data1,
-                            content_type='application/json')
+        rv1 = self.post_todo(todo1)
         todo1_data = json.loads(rv1.data)
         id1 = todo1_data[u'id']
 
         todo2 = {'title':'todo2', 'prio': 1, 'done':False}
-        data2 = json.dumps(todo2)
-        rv2 = self.app.post('/todos', data = data2,
-                            content_type='application/json')
+        rv2 = self.post_todo(todo2)
         todo2_data = json.loads(rv2.data)
         id2 = todo2_data[u'id']
 
@@ -83,6 +82,12 @@ class TodosEmptyResource(unittest.TestCase):
         updated_todo2_res = self.app.get('/todos/' + str(id2))
         updated_todo2 = json.loads(updated_todo2_res.data)
         assert 0 == updated_todo2[u'prio']
+
+    def post_todo(self, todo):
+        data = json.dumps(todo)
+        result = self.app.post('/todos', data = data,
+                               content_type='application/json')
+        return result
 
 
 if __name__ == '__main__':
