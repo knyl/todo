@@ -16,25 +16,26 @@ All data posted to, or retrieved from the API must be valid JSON.
 #### Resources
 * GET /todos
 List the current todos.
-**Response** A collection with Todo objects.
+  * **Response** A collection with Todo objects.
 
 * GET /todos/<todo_id>
 Retrieve a specific todo.
-**Response** The requested Todo object, or 404 Not Found, if it doesn't exist.
+  * **Response** The requested Todo object, or 404 Not Found, if it doesn't exist.
 
- POST /todos
+* POST /todos
 Add a new todo.
-**Input** A Todo object.
-**Response** 201 Created, if the data is valid.
+  * **Input** A Todo object.
+  * **Response** 201 Created, if the data is valid.
 
 * PUT /todos/<todo_id>
-**Input** A Todo object.
-**Response** 200 OK, if the data is valid, and the object exists.
+Update a todo.
+  * **Input** A Todo object.
+  * **Response** 200 OK, if the data is valid, and the object exists.
 
 * PUT /todos/order
 Update the order of the todos.
-**Input** A collection with todo_ids.
-**Response** 200 OK, if the data is valid, and the todos exists.
+  * **Input** A collection with todo_ids.
+  * **Response** 200 OK, if the data is valid, and the todos exists.
 
 ### TODO
 * Clean up tests and code
