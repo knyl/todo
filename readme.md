@@ -6,6 +6,11 @@ Lets you add todos, edit them and reorder them.
 
 ### Setup
 
+Install the required pip packages:
+```
+pip install -r requirements.txt
+```
+
 To create the database, run:
 ```
 > sqlite3 todilo.db < schema.sql
