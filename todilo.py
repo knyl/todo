@@ -4,7 +4,6 @@ import sqlite3
 
 app = Flask(__name__)
 app.config.from_object(__name__)
-db = simple_db.SimpleDb()
 
 # TODO: Put all these in a config file
 app.config.update(dict(
